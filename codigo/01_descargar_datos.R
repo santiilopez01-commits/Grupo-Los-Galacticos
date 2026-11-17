@@ -36,9 +36,8 @@ for (i in seq_along(tickers)) {
     error = function(e) NULL)
   if (!is.null(x) && nrow(x) > 0) {
     ajustado <- Ad(x)
-    precios[[t]] <- data.frame(fecha = as.character(index(ajustado)),
-                               ticker = t,
-                               precio_ajustado = as.numeric(ajustado))
+    colnames(ajustado) <- t
+    precios[[t]] <- ajustado
     registro$descargado[i]    <- "SI"
     registro$n_obs[i]         <- nrow(ajustado)
     registro$primera_fecha[i] <- as.character(min(index(ajustado)))
@@ -47,11 +46,17 @@ for (i in seq_along(tickers)) {
   Sys.sleep(0.3)  # no saturar a Yahoo
 }
 
-precios <- do.call(rbind, precios)
-precios <- precios[!is.na(precios$precio_ajustado), ]
+# Formato ancho: una fila por fecha, una columna por ticker (NA = no cotizaba)
+precios <- do.call(merge, precios)
+tabla   <- data.frame(fecha = as.character(index(precios)),
+                      round(coredata(precios), 4), check.names = FALSE)
 
+# Se guarda comprimido (.csv.gz) para respetar el límite de 25 MB de GitHub web.
+# Se lee con: read.csv("datos/precios_ajustados_2015_2025.csv.gz", check.names = FALSE)
 dir.create("datos", showWarnings = FALSE)
-write.csv(precios,  "datos/precios_ajustados_2015_2025.csv", row.names = FALSE)
+con <- gzfile("datos/precios_ajustados_2015_2025.csv.gz", "w")
+write.csv(tabla, con, row.names = FALSE, na = "")
+close(con)
 registro$en_indice_hoy <- universo$en_indice_hoy
 registro$fecha_descarga <- as.character(Sys.Date())
 write.csv(registro, "datos/registro_descarga.csv", row.names = FALSE)
