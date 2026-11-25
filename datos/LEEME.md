@@ -33,3 +33,18 @@ covarianza se estima solo con datos anteriores a *t*.
 Yahoo Finance no tiene precios para parte de las empresas que salieron del índice
 (quiebras, fusiones, cambios de ticker). Esas acciones quedan fuera del análisis y
 se informa cuántas son (ver `registro_descarga.csv`) como limitación en el informe.
+
+## 3. Tasa libre de riesgo
+- `tasa_libre_riesgo.csv`: T-bill a 3 meses de EE.UU., % anual, mensual (FRED, serie
+  TB3MS), descargada con `codigo/01b_descargar_tasa.R`. Si el archivo no está, el
+  backtest usa tasa 0 y lo avisa.
+
+## 4. Limpieza que aplica el código (no se modifican estos archivos)
+1. **Ticker reutilizado:** Yahoo asigna a empresas que salieron del índice el precio de
+   otra empresa que hoy usa el mismo ticker (ej. STI, POM, CAM, FB). Se descartan los
+   precios posteriores a 40 días después de la última fecha en el índice.
+2. **Errores de dato:** alzas diarias mayores a 50% se tratan como faltantes (13 casos,
+   ej. PARA, DHR). Las caídas fuertes se mantienen porque suelen ser reales (2020).
+3. **Precio congelado:** se excluye en ese mes la acción con retorno exactamente cero en
+   más del 5% de los días de la ventana (ej. PARA en 2023, cuya serie en Yahoo está
+   corrupta).

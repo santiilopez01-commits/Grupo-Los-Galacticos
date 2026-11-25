@@ -1,0 +1,8 @@
+Período fuera de muestra: 2017-02 a 2025-12 (107 meses)
+Ventana de estimación: 504 días hábiles
+Acciones en el universo por mes: mínimo 389, promedio 443, máximo 485
+Intensidad de encogimiento Ledoit-Wolf: promedio 0.18 (rango 0.09 a 0.32)
+Tasa libre de riesgo promedio: 2.37% anual
+Precios descartados por ticker reutilizado: 108320
+Alzas diarias > 50% tratadas como error de dato: 13
+Exclusiones por precio congelado (acción-mes): 88
