@@ -18,8 +18,9 @@ Estos archivos son los originales descargados. **No se editan a mano.**
 ## 2. Precios diarios ajustados
 - **Fuente:** Yahoo Finance, descargados con el paquete `quantmod` de R
   (script `codigo/01_descargar_datos.R`). Período 01-01-2015 a 31-12-2025.
-- `precios_ajustados_2015_2025.csv`: fecha, ticker, precio ajustado
-  (por dividendos y splits).
+- `precios_ajustados_2015_2025.csv.gz`: una fila por fecha y una columna por ticker,
+  con el precio ajustado por dividendos y splits (vacío = no cotizaba). Comprimido
+  para respetar el límite de tamaño de GitHub; R lo lee directo con `read.csv()`.
 - `registro_descarga.csv`: para cada ticker, si se obtuvo o no, número de
   observaciones, rango de fechas y fecha de descarga.
 
